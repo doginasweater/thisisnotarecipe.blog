@@ -1,8 +1,9 @@
-import React from "react";
-import { Link, Route } from "react-router-dom";
-import { Home } from "./app/home";
+import React, { lazy, Suspense } from "react";
+import { Link, Route, Switch } from "react-router-dom";
+import "./routes.scss";
 
-const Admin = () => <h1>admin</h1>;
+const Dashboard = lazy(() => import("./admin/index"));
+const Home = lazy(() => import("./app/home"));
 
 export const routes = (
   <div>
@@ -10,8 +11,12 @@ export const routes = (
       <Link to="/">Home</Link> | <Link to="/dashboard">Admin</Link>
     </nav>
     <main>
-      <Route path="/" exact={true} component={Home} />
-      <Route path="/dashboard" exact={true} component={Admin} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route path="/" exact={true} component={Home} />
+          <Route path="/dashboard" exact={true} component={Dashboard} />
+        </Switch>
+      </Suspense>
     </main>
   </div>
 );

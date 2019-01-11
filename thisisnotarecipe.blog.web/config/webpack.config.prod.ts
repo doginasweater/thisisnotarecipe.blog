@@ -1,3 +1,4 @@
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
 import webpack from "webpack";
 import webpackMerge from "webpack-merge";
@@ -9,6 +10,27 @@ const config: webpack.Configuration = webpackMerge(common, {
   output: {
     path: path.resolve("./dist"),
     filename: "[name].[hash].js",
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(scss|css)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "typings-for-css-modules-loader",
+            options: {
+              modules: true,
+              importLoaders: 1,
+              localIdentName: "[name]__[local]__[hash:base64:5]",
+              namedExport: true,
+              camelCase: true,
+            },
+          },
+          "sass-loader",
+        ],
+      },
+    ],
   },
   optimization: {
     splitChunks: {
@@ -25,6 +47,10 @@ const config: webpack.Configuration = webpackMerge(common, {
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.HashedModuleIdsPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "[name].[hash].css",
+      chunkFilename: "[id].[hash].css",
+    }),
   ],
 });
 
