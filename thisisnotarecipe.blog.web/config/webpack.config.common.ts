@@ -35,6 +35,22 @@ const config: webpack.Configuration = {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: "file-loader",
       },
+      {
+        test: /\.scss$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: [
+                require("autoprefixer"),
+              ],
+            },
+          },
+          "sass-loader",
+        ],
+      },
     ],
   },
   plugins: [

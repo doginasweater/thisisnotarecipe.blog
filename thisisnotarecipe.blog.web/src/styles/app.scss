@@ -1,0 +1,11 @@
+@import "overrides.scss";
+@import "~bootstrap/scss/bootstrap";
+
+.content {
+  background-color: $gray-800;
+  min-height: 100%;
+}
+
+.light-gray {
+  background-color: $gray-800;
+}

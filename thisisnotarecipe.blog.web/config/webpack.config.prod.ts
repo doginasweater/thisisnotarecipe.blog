@@ -17,14 +17,13 @@ const config: webpack.Configuration = webpackMerge(common, {
         test: /\.(scss|css)$/,
         use: [
           MiniCssExtractPlugin.loader,
+          "css-loader",
           {
-            loader: "typings-for-css-modules-loader",
+            loader: "postcss-loader",
             options: {
-              modules: true,
-              importLoaders: 1,
-              localIdentName: "[name]__[local]__[hash:base64:5]",
-              namedExport: true,
-              camelCase: true,
+              plugins: [
+                require("autoprefixer"),
+              ],
             },
           },
           "sass-loader",

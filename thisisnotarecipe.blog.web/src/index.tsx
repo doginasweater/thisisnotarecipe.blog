@@ -3,6 +3,8 @@ import { render } from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { routes as r } from "./routes";
 
+import "./styles/app.scss";
+
 const renderApp = (routes: JSX.Element) => {
   render(
     <Router>
