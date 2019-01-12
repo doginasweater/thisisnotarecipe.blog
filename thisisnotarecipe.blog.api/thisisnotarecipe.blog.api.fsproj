@@ -11,4 +11,8 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\thisisnotarecipe.blog.data\thisisnotarecipe.blog.data.csproj" />
+  </ItemGroup>
+
 </Project>
