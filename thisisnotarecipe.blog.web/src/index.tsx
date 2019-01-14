@@ -1,6 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
+import { layout } from "./layout";
 import { routes as r } from "./routes";
 
 import "./styles/app.scss";
@@ -8,7 +9,7 @@ import "./styles/app.scss";
 const renderApp = (routes: JSX.Element) => {
   render(
     <Router>
-      {routes}
+      {layout(routes)}
     </Router>,
     document.getElementById("root"),
   );

@@ -4,7 +4,7 @@ import { Col, Row } from "reactstrap";
 export default () => (
   <>
     <h2 className="mb-4">Pressure Cooker Sesame Chicken</h2>
-    <h3 className="mb-2">Ingredients</h3>
+    <h4 className="mb-2">Ingredients</h4>
     <Row>
       <Col>
         <ul>
@@ -30,7 +30,7 @@ export default () => (
         </ul>
       </Col>
     </Row>
-    <h3 className="mb-2">Instructions</h3>
+    <h4 className="mb-2">Instructions</h4>
     <Row>
       <Col>
         <ol>
