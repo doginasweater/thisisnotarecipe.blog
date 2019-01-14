@@ -31,5 +31,15 @@ $header-height: 72px;
 }
 
 main {
-  padding-top: $header-height;
+  padding-top: $header-height + 5px;
+}
+
+.unstyled-link {
+  color: $body-color;
+  text-decoration: none;
+
+  &:hover, &:active, &:visited {
+    color: $body-color;
+    text-decoration: none;
+  }
 }

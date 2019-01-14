@@ -1,3 +1,3 @@
 import * as React from "react";
 
-export default () => <h1>admin</h1>;
+export default () => <h2>Admin</h2>;

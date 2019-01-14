@@ -7,8 +7,8 @@ const Home = lazy(() => import("./app/home"));
 export const routes = (
   <Suspense fallback={<div>Loading...</div>}>
     <Switch>
-      <Route path="/" component={Home} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/" component={Home} />
     </Switch>
   </Suspense>
 );
