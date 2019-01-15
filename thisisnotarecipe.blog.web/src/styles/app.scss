@@ -7,10 +7,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .light-gray {
-  background-color: #212529;
+  background-color: #202b30;
 }
 
-$header-height: 72px;
+$header-height: 56px;
 
 .sidebar {
   position: fixed;
@@ -25,14 +25,13 @@ $header-height: 72px;
     position: sticky;
     top: 0;
     height: calc(100vh - $header-height);
-    padding-top: .5rem;
     overflow-x: hidden;
     overflow-y: auto;
   }
 }
 
 main {
-  padding-top: $header-height + 5px;
+  padding-top: $header-height + 10px;
 }
 
 .unstyled-link {

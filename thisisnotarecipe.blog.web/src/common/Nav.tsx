@@ -24,7 +24,7 @@ export default ({ headings }: NavProps) =>
         <Link
           key={lindex}
           to={{ pathname: link.path }}
-          className="d-flex align-items-center w-100 pl-2 nav-item text-danger"
+          className="d-flex align-items-center w-100 nav-item"
         >
           <Icon name={link.icon} /> <div className="ml-2">{link.label}</div>
         </Link>

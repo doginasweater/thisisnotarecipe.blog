@@ -12,11 +12,22 @@ const date = new Date();
 
 const navbar = [
   {
-    heading: "Main",
+    heading: "Search",
+    icon: "search",
     links: [
       {
         path: "/",
-        label: "Home",
+        label: "Recipe",
+        icon: "search",
+      },
+    ],
+  },
+  {
+    heading: "Categories",
+    links: [
+      {
+        path: "/",
+        label: "Breakfast",
         icon: "home",
       },
       {
@@ -64,29 +75,20 @@ const markup = (props: Props) => {
 
   return (
     <>
-      <nav className="navbar navbar-dark fixed-top flex-md-nowrap p-2 shadow light-gray pl-3">
-        <h1>
-          <Link to="/" className="unstyled-link">
-            This Is Not a Recipe Blog
-            {appName && `- ${appName}`}
-          </Link>
-        </h1>
-        <div>
-          <input
-            type="text"
-            className="form-control bg-dark border-0"
-            placeholder="Search for a recipe"
-          />
-        </div>
+      <nav className="navbar navbar-dark fixed-top flex-md-nowrap shadow light-gray pl-3">
+        <Link to="/" className="unstyled-link navbar-brand">
+          This Is Not a Recipe Blog
+          {appName && `- ${appName}`}
+        </Link>
       </nav>
       <Container fluid={true}>
         <Row>
           <nav className="col-md-2 d-none d-md-block sidebar light-gray pl-2">
-            <div className="sidebar-sticky pl-2">
+            <div className="sidebar-sticky p-4">
               {Nav({ headings: navbar })}
             </div>
           </nav>
-          <main className="col-md-9 col-lg-10 ml-sm-auto px-4">{content}</main>
+          <main className="col-md-9 col-lg-10 ml-sm-auto px-5">{content}</main>
         </Row>
       </Container>
       <footer className="footer mt-auto py-3 text-right">
@@ -95,7 +97,6 @@ const markup = (props: Props) => {
           <a
             href="https://github.com/myopicmage/thisisnotarecipe.blog"
             target="_blank"
-            className="text-danger"
           >
             dog in a sweater
           </a>

@@ -7,10 +7,7 @@ type ReferenceProps = {
 };
 
 export default ({ text }: ReferenceProps) => (
-  <Link
-    to="#"
-    className="text-danger"
-  >
+  <Link to="#">
     <span>{text}</span> <Icon name="info" size="small" />
   </Link>
 );
