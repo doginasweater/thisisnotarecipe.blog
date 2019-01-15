@@ -18,7 +18,7 @@ export type NavProps = {
 
 export default ({ headings }: NavProps) =>
   headings.map((heading, hindex) => (
-    <span className="nav-group" key={hindex}>
+    <div className="nav-group mb-4" key={hindex}>
       <h5>{heading.heading}</h5>
       {heading.links.map((link, lindex) => (
         <Link
@@ -29,5 +29,5 @@ export default ({ headings }: NavProps) =>
           <Icon name={link.icon} /> <div className="ml-2">{link.label}</div>
         </Link>
       ))}
-    </span>
+    </div>
   ));

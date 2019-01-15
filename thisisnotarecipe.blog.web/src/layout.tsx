@@ -26,6 +26,37 @@ const navbar = [
       },
     ],
   },
+  {
+    heading: "Recipes By Cook",
+    icon: "users",
+    links: [
+      {
+        path: "/",
+        label: "Kevin",
+        icon: "user",
+      },
+      {
+        path: "/",
+        label: "Steven",
+        icon: "user",
+      },
+      {
+        path: "/",
+        label: "Chris",
+        icon: "user",
+      },
+      {
+        path: "/",
+        label: "Aki",
+        icon: "user",
+      },
+      {
+        path: "/",
+        label: "Danielle",
+        icon: "user",
+      },
+    ],
+  },
 ];
 
 const markup = (props: Props) => {
