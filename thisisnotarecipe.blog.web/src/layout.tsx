@@ -31,8 +31,8 @@ const navbar = [
         icon: "home",
       },
       {
-        path: "dashboard",
-        label: "Admin",
+        path: "/",
+        label: "Lunch",
         icon: "tools",
       },
     ],
