@@ -23,24 +23,18 @@ export default () => (
         </a>
       </Col>
     </Row>
-    <Row className="mt-4 mb-2">
+    <Row className="mt-4">
       <Col sm={8}>
         <div className="d-flex justify-content-between align-items-center">
           <h4>Ingredients</h4>
-          <div>
-            <UncontrolledButtonDropdown>
-              <DropdownToggle color="primary">
-                <Icon name="cog" />
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem header={true}>Sort</DropdownItem>
-                <DropdownItem>By Use (ascending)</DropdownItem>
-                <DropdownItem>By Use (descending)</DropdownItem>
-                <DropdownItem>By Category</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledButtonDropdown>
-          </div>
         </div>
+      </Col>
+    </Row>
+    <Row className="mb-3">
+      <Col>
+        <span className="smaller">
+          Sort by: <a href="#" className="selected">Order Used</a> | <a href="#">Type</a>
+        </span>
       </Col>
     </Row>
     <Row>
