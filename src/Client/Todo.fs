@@ -1,4 +1,4 @@
-module Index
+module Todo
 
 open Elmish
 open Fable.Remoting.Client
@@ -20,8 +20,7 @@ let todosApi =
 let init () : Model * Cmd<Msg> =
     let model = { Todos = []; Input = "" }
 
-    let cmd =
-        Cmd.OfAsync.perform todosApi.getTodos () GotTodos
+    let cmd = Cmd.OfAsync.perform todosApi.getTodos () GotTodos
 
     model, cmd
 
@@ -32,14 +31,10 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
     | AddTodo ->
         let todo = Todo.create model.Input
 
-        let cmd =
-            Cmd.OfAsync.perform todosApi.addTodo todo AddedTodo
+        let cmd = Cmd.OfAsync.perform todosApi.addTodo todo AddedTodo
 
         { model with Input = "" }, cmd
-    | AddedTodo todo ->
-        { model with
-              Todos = model.Todos @ [ todo ] },
-        Cmd.none
+    | AddedTodo todo -> { model with Todos = model.Todos @ [ todo ] }, Cmd.none
 
 open Feliz
 open Feliz.Bulma
@@ -58,7 +53,7 @@ let navBrand =
         ]
     ]
 
-let containerBox (model: Model) (dispatch: Msg -> unit) =
+let containerBox model dispatch =
     Bulma.box [
         Bulma.content [
             Html.ol [
@@ -91,7 +86,7 @@ let containerBox (model: Model) (dispatch: Msg -> unit) =
         ]
     ]
 
-let view (model: Model) (dispatch: Msg -> unit) =
+let view model dispatch =
     Bulma.hero [
         hero.isFullHeight
         color.isPrimary
@@ -114,7 +109,7 @@ let view (model: Model) (dispatch: Msg -> unit) =
                         prop.children [
                             Bulma.title [
                                 text.hasTextCentered
-                                prop.text "thisisnotarecipe.blog"
+                                prop.text "HELLO. MY NAME IS INIGO MONTOYA."
                             ]
                             containerBox model dispatch
                         ]

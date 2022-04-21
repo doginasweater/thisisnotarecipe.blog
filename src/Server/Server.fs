@@ -6,38 +6,47 @@ open Saturn
 
 open Shared
 
+open LiteDB.FSharp
+open LiteDB
+
 type Storage() =
-    let todos = ResizeArray<_>()
+    let database =
+        let mapper = FSharpBsonMapper()
+        let connStr = "Filename=recipes.db;mode=Exclusive"
+        new LiteDatabase(connStr, mapper)
 
-    member __.GetTodos() = List.ofSeq todos
+    let todos = database.GetCollection<Todo> "todos"
 
-    member __.AddTodo(todo: Todo) =
+    member _.GetTodos() = todos.FindAll() |> List.ofSeq
+
+    member _.AddTodo(todo: Todo) =
         if Todo.isValid todo.Description then
-            todos.Add todo
+            todos.Insert todo |> ignore
             Ok()
         else
             Error "Invalid todo"
 
 let storage = Storage()
 
-storage.AddTodo(Todo.create "Create new SAFE project")
-|> ignore
+if storage.GetTodos() |> Seq.isEmpty then
+    storage.AddTodo(Todo.create "Create new SAFE project")
+    |> ignore
 
-storage.AddTodo(Todo.create "Write your app")
-|> ignore
+    storage.AddTodo(Todo.create "Write your app")
+    |> ignore
 
-storage.AddTodo(Todo.create "Ship it !!!")
-|> ignore
+    storage.AddTodo(Todo.create "Ship it !!!")
+    |> ignore
 
 let todosApi =
     { getTodos = fun () -> async { return storage.GetTodos() }
       addTodo =
-          fun todo ->
-              async {
-                  match storage.AddTodo todo with
-                  | Ok () -> return todo
-                  | Error e -> return failwith e
-              } }
+        fun todo ->
+            async {
+                match storage.AddTodo todo with
+                | Ok () -> return todo
+                | Error e -> return failwith e
+            } }
 
 let webApp =
     Remoting.createApi ()
