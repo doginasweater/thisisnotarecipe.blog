@@ -1,24 +1,20 @@
 module TodoApi
 
+open DbContext
+open EntityFrameworkCore.FSharp.DbContextHelpers
 open Shared
-open Storage
+
+let emptyTodo =
+    { Id = (System.Guid.NewGuid())
+      Description = "" }
 
 let todosApi =
-    { getTodos = fun () -> async { return storage.GetTodos() }
+    { getTodos = fun () -> async { return ctx.Todos |> List.ofSeq }
       addTodo =
         fun todo ->
             async {
-                match storage.AddTodo todo with
-                | Ok () -> return todo
-                | Error e -> return failwith e
+                do! todo |> addEntityAsync ctx
+                do! saveChangesAsync ctx
+
+                return todo
             } }
-
-if storage.GetTodos() |> Seq.isEmpty then
-    storage.AddTodo(Todo.create "Create new SAFE project")
-    |> ignore
-
-    storage.AddTodo(Todo.create "Write your app")
-    |> ignore
-
-    storage.AddTodo(Todo.create "Ship it !!!")
-    |> ignore

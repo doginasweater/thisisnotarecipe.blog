@@ -1,4 +1,4 @@
-module Server
+module App
 
 open Fable.Remoting.Server
 open Fable.Remoting.Giraffe

@@ -6,10 +6,11 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
-    <Compile Include="Storage.fs" />
+    <Compile Include="DbContext.fs" />
+    <Compile Include="Migrations/*.fs" />
     <Compile Include="RecipeApi.fs" />
     <Compile Include="TodoApi.fs" />
-    <Compile Include="Server.fs" />
+    <Compile Include="App.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.fsproj" />

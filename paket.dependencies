@@ -2,8 +2,9 @@ source https://api.nuget.org/v3/index.json
 framework: net6.0
 storage: none
 
+nuget EntityFrameworkCore.FSharp
 nuget Fable.Remoting.Giraffe
-nuget LiteDB.FSharp
+nuget Microsoft.EntityFrameworkCore.Sqlite
 nuget Saturn
 nuget Expecto
 

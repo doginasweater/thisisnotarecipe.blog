@@ -1,7 +1,6 @@
 module RecipeApi
 
 open Shared
-open Storage
 
 let recipesApi =
     { getRecipes = fun () -> async { return [] }
