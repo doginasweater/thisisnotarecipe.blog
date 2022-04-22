@@ -5,54 +5,24 @@ open Fable.Remoting.Giraffe
 open Saturn
 
 open Shared
+open TodoApi
+open RecipeApi
 
-open LiteDB.FSharp
-open LiteDB
+open Giraffe
 
-type Storage() =
-    let database =
-        let mapper = FSharpBsonMapper()
-        let connStr = "Filename=recipes.db;mode=Exclusive"
-        new LiteDatabase(connStr, mapper)
+let recipeApp =
+    Remoting.createApi ()
+    |> Remoting.withRouteBuilder Route.builder
+    |> Remoting.fromValue recipesApi
+    |> Remoting.buildHttpHandler
 
-    let todos = database.GetCollection<Todo> "todos"
-
-    member _.GetTodos() = todos.FindAll() |> List.ofSeq
-
-    member _.AddTodo(todo: Todo) =
-        if Todo.isValid todo.Description then
-            todos.Insert todo |> ignore
-            Ok()
-        else
-            Error "Invalid todo"
-
-let storage = Storage()
-
-if storage.GetTodos() |> Seq.isEmpty then
-    storage.AddTodo(Todo.create "Create new SAFE project")
-    |> ignore
-
-    storage.AddTodo(Todo.create "Write your app")
-    |> ignore
-
-    storage.AddTodo(Todo.create "Ship it !!!")
-    |> ignore
-
-let todosApi =
-    { getTodos = fun () -> async { return storage.GetTodos() }
-      addTodo =
-        fun todo ->
-            async {
-                match storage.AddTodo todo with
-                | Ok () -> return todo
-                | Error e -> return failwith e
-            } }
-
-let webApp =
+let todoApp =
     Remoting.createApi ()
     |> Remoting.withRouteBuilder Route.builder
     |> Remoting.fromValue todosApi
     |> Remoting.buildHttpHandler
+
+let webApp = choose [ recipeApp; todoApp ]
 
 let app =
     application {

@@ -1,13 +1,14 @@
 module Router
 
+[<RequireQualifiedAccess>]
 type Route =
     | Todo
     | Recipes
 
 let toUrl (route: Route) =
     match route with
-    | Todo -> ""
-    | Recipes -> "recipes"
+    | Route.Todo -> ""
+    | Route.Recipes -> "recipes"
 
 open Elmish.UrlParser
 
