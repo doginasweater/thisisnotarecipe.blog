@@ -24,6 +24,5 @@ let update msg model =
     | GotRecipes recipes -> { model with Recipes = recipes }, Cmd.none
 
 open Feliz
-open Feliz.Bulma
 
-let view model dispatch = Bulma.container [ prop.text "recipes" ]
+let view model dispatch = Html.div [ prop.text "hello" ]

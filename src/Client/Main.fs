@@ -48,8 +48,71 @@ let update (msg: Msg) (model: Model) =
     | Page.NotFound, _ -> model, Cmd.none
     | _, _ -> { model with ActivePage = Page.NotFound }, Cmd.none
 
+open Feliz
+open Fable.Core.JsInterop
+
+importAll "./style.css"
+
 let view (model: Model) (dispatch: Dispatch<Msg>) =
-    match model.ActivePage with
-    | Page.NotFound -> str "hello steven!!!"
-    | Page.TodosPage todoModel -> Todo.view todoModel (TodoMsg >> dispatch)
-    | Page.RecipesPage recipesModel -> Recipe.view recipesModel (RecipesMsg >> dispatch)
+    React.fragment [
+        Html.header [
+            prop.classes [
+                "p-8"
+                "border-b"
+                "border-white"
+                "prose"
+                "dark:prose-invert"
+                "max-w-none"
+            ]
+            prop.children [
+                Html.h1 [
+                    prop.text "This Is Not a Recipe Blog"
+                ]
+            ]
+        ]
+
+        Html.div [
+            prop.classes [
+                "left-side"
+                "border-r"
+                "border-white"
+                "p-8"
+                "prose"
+                "dark:prose-invert"
+            ]
+            prop.text "i am a left menu"
+        ]
+
+        Html.main [
+            prop.classes [
+                "p-8"
+                "prose"
+                "dark:prose-invert"
+            ]
+            prop.children [
+                match model.ActivePage with
+                | Page.NotFound -> str "hello steven!!!"
+                | Page.TodosPage todoModel -> Todo.view todoModel (TodoMsg >> dispatch)
+                | Page.RecipesPage recipesModel -> Recipe.view recipesModel (RecipesMsg >> dispatch)
+            ]
+        ]
+
+        Html.footer [
+            prop.classes [
+                "p-8"
+                "flex"
+                "justify-between"
+                "prose"
+                "dark:prose-invert"
+                "max-w-none"
+            ]
+            prop.children [
+                Html.div [
+                    prop.text "this is a footer"
+                ]
+                Html.div [
+                    prop.text "Copyright 2022 - Dog In a Sweater"
+                ]
+            ]
+        ]
+    ]

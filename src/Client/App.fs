@@ -14,7 +14,7 @@ Program.mkProgram Main.init Main.update Main.view
 #if DEBUG
 |> Program.withConsoleTrace
 #endif
-|> Program.withReactSynchronous "elmish-app"
+|> Program.withReactSynchronous "root"
 #if DEBUG
 |> Program.withDebugger
 #endif
