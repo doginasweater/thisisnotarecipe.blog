@@ -48,6 +48,12 @@ let update (msg: Msg) (model: Model) =
     | Page.NotFound, _ -> model, Cmd.none
     | _, _ -> { model with ActivePage = Page.NotFound }, Cmd.none
 
+let renderBody model dispatch =
+    match model.ActivePage with
+    | Page.NotFound -> str "hello steven!!!"
+    | Page.TodosPage todoModel -> Todo.view todoModel (TodoMsg >> dispatch)
+    | Page.RecipesPage recipesModel -> Recipe.view recipesModel (RecipesMsg >> dispatch)
+
 open Feliz
 open Fable.Core.JsInterop
 
@@ -59,14 +65,29 @@ let view (model: Model) (dispatch: Dispatch<Msg>) =
             prop.classes [
                 "p-8"
                 "border-b"
-                "border-white"
+                "border-gray-400"
                 "prose"
                 "dark:prose-invert"
                 "max-w-none"
             ]
             prop.children [
-                Html.h1 [
-                    prop.text "This Is Not a Recipe Blog"
+                Html.div [
+                    prop.classes [
+                        "flex"
+                        "justify-between"
+                    ]
+                    prop.children [
+                        Html.a [
+                            prop.href "/"
+                            prop.classes [ "block"; "no-underline" ]
+                            prop.children [
+                                Html.h1 [
+                                    prop.classes [ "mb-0" ]
+                                    prop.text "This Is Not a Recipe Blog"
+                                ]
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ]
@@ -75,10 +96,11 @@ let view (model: Model) (dispatch: Dispatch<Msg>) =
             prop.classes [
                 "left-side"
                 "border-r"
-                "border-white"
+                "border-gray-400"
                 "p-8"
                 "prose"
                 "dark:prose-invert"
+                "bg-zinc-900"
             ]
             prop.text "i am a left menu"
         ]
@@ -88,30 +110,53 @@ let view (model: Model) (dispatch: Dispatch<Msg>) =
                 "p-8"
                 "prose"
                 "dark:prose-invert"
-            ]
-            prop.children [
-                match model.ActivePage with
-                | Page.NotFound -> str "hello steven!!!"
-                | Page.TodosPage todoModel -> Todo.view todoModel (TodoMsg >> dispatch)
-                | Page.RecipesPage recipesModel -> Recipe.view recipesModel (RecipesMsg >> dispatch)
-            ]
-        ]
-
-        Html.footer [
-            prop.classes [
-                "p-8"
-                "flex"
-                "justify-between"
-                "prose"
-                "dark:prose-invert"
                 "max-w-none"
+                "flex"
+                "flex-col"
+                "bg-slate-800"
             ]
             prop.children [
                 Html.div [
-                    prop.text "this is a footer"
+                    prop.classes [ "flex-1" ]
+                    prop.children [
+                        renderBody model dispatch
+                    ]
                 ]
-                Html.div [
-                    prop.text "Copyright 2022 - Dog In a Sweater"
+                Html.footer [
+                    prop.classes [
+                        "flex-none"
+                        "flex"
+                        "justify-between"
+                        "prose"
+                        "dark:prose-invert"
+                        "max-w-none"
+                    ]
+                    prop.children [
+                        Html.div "this is a footer"
+                        Html.div [
+                            Html.a [
+                                prop.href "https://github.com/doginasweater/thisisnotarecipe.blog"
+                                prop.target "_blank"
+                                prop.classes [
+                                    "block"
+                                    "flex"
+                                    "gap-4"
+                                    "items-center"
+                                    "no-underline"
+                                ]
+                                prop.children [
+                                    Html.div "Copyright 2022 - Dog In a Sweater"
+                                    Html.i [
+                                        prop.classes [
+                                            "fab"
+                                            "fa-github"
+                                            "block"
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ]
