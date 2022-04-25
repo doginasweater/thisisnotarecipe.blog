@@ -5,6 +5,7 @@ open System
 [<CLIMutable>]
 type Recipe =
     { Id: Guid
+      Title: string
       Description: string
       Category: string }
 

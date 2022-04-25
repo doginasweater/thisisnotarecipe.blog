@@ -18,3 +18,5 @@ release.sh
 *.orig
 *.DotSettings.user
 *.db
+*.db-shm
+*.db-wal
