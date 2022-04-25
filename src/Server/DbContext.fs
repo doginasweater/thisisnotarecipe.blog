@@ -25,7 +25,9 @@ type ThisIsNotAContext() =
     override _.OnModelCreating builder = builder.RegisterOptionTypes()
 
     override __.OnConfiguring(options: DbContextOptionsBuilder) : unit =
-        options.UseSqlite("Data Source=recipes.db")
+        options
+            .UseSqlite("Data Source=recipes.db")
+            .UseFSharpTypes()
         |> ignore
 
 let ctx = new ThisIsNotAContext()
