@@ -45,6 +45,9 @@ Target.create "Azure" (fun _ ->
     |> ignore)
 
 Target.create "Run" (fun _ ->
+    Environment.setEnvironVar "DOTNET_ENVIRONMENT" "Development"
+    Environment.setEnvironVar "ASPNETCORE_ENVIRONMENT" "Development"
+
     run dotnet "build" sharedPath
 
     [ "server", dotnet "watch run" serverPath

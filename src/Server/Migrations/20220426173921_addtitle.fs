@@ -9,10 +9,28 @@ open Microsoft.EntityFrameworkCore.Migrations
 open Microsoft.EntityFrameworkCore.Storage.ValueConversion
 
 [<DbContext(typeof<DbContext.ThisIsNotAContext>)>]
-type ThisIsNotAContextModelSnapshot() =
-    inherit ModelSnapshot()
+[<Migration("20220426173921_addtitle")>]
+type addtitle() =
+    inherit Migration()
 
-    override this.BuildModel(modelBuilder: ModelBuilder) =
+    override this.Up(migrationBuilder:MigrationBuilder) =
+        migrationBuilder.AddColumn<string>(
+            name = "Title"
+            ,table = "Recipes"
+            ,``type`` = "TEXT"
+            ,nullable = false
+            ,defaultValue = "\"\""
+            ) |> ignore
+
+
+    override this.Down(migrationBuilder:MigrationBuilder) =
+        migrationBuilder.DropColumn(
+            name = "Title"
+            ,table = "Recipes"
+            ) |> ignore
+
+
+    override this.BuildTargetModel(modelBuilder: ModelBuilder) =
         modelBuilder.HasAnnotation("ProductVersion", "6.0.4") |> ignore
 
         modelBuilder.Entity("Shared.Recipe", (fun b ->

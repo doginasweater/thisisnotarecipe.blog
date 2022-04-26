@@ -7,6 +7,7 @@ open Saturn
 open Shared
 open TodoApi
 open RecipeApi
+open DbContext
 
 open Giraffe
 
@@ -23,6 +24,8 @@ let todoApp =
     |> Remoting.buildHttpHandler
 
 let webApp = choose [ recipeApp; todoApp ]
+
+ctx.Database.EnsureCreated() |> ignore
 
 let app =
     application {
