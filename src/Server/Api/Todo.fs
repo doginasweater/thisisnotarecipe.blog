@@ -1,8 +1,10 @@
-module TodoApi
+module Todo
 
 open DbContext
 open EntityFrameworkCore.FSharp.DbContextHelpers
 open Shared
+
+let ctx = new ThisIsNotAContext()
 
 let emptyTodo =
     { Id = (System.Guid.NewGuid())

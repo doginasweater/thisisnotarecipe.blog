@@ -1,8 +1,10 @@
-module RecipeApi
+module Recipe
 
 open Shared
 open DbContext
 open EntityFrameworkCore.FSharp.DbContextHelpers
+
+let ctx = new ThisIsNotAContext()
 
 let getRecipes () =
     async { return! toListAsync ctx.Recipes }

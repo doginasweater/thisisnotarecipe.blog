@@ -6,10 +6,11 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
-    <Compile Include="DbContext.fs" />
+    <Compile Include="Database/DbContext.fs" />
     <Compile Include="Migrations/*.fs" />
-    <Compile Include="RecipeApi.fs" />
-    <Compile Include="TodoApi.fs" />
+    <Compile Include="Api/Recipe.fs" />
+    <Compile Include="Api/Todo.fs" />
+    <Compile Include="Api/Api.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <ItemGroup>

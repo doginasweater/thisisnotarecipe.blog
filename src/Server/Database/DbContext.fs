@@ -29,5 +29,3 @@ type ThisIsNotAContext() =
             .UseSqlite("Data Source=recipes.db")
             .UseFSharpTypes()
         |> ignore
-
-let ctx = new ThisIsNotAContext()
