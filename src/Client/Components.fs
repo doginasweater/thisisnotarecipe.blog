@@ -18,6 +18,7 @@ module Components =
             | Primary -> [ "bg-cyan-400" ]
             | Danger ->
                 [ "bg-red-700"
+                  "text-white"
                   "dark:text-white"
                   "border-red-500" ]
             | Success -> [ "" ]

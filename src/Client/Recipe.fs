@@ -71,7 +71,7 @@ let renderAddingRecipe dispatch =
                                 prop.onChange (fun x -> SetTitleInput x |> dispatch)
                                 prop.classes [
                                     "form-input"
-                                    "dark:bg-slate-800"
+                                    "dark:bg-slate-900"
                                     "dark:border-0"
                                     "dark:border-b"
                                     "block"
@@ -88,7 +88,7 @@ let renderAddingRecipe dispatch =
                                 prop.onChange (fun x -> SetDescriptionInput x |> dispatch)
                                 prop.classes [
                                     "form-input"
-                                    "dark:bg-slate-800"
+                                    "dark:bg-slate-900"
                                     "dark:border-0"
                                     "dark:border-b"
                                     "block"

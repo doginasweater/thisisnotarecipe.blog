@@ -50,7 +50,7 @@ let update (msg: Msg) (model: Model) =
 
 let renderBody model dispatch =
     match model.ActivePage with
-    | Page.NotFound -> str "hello steven!!!"
+    | Page.NotFound -> str "Page not found?"
     | Page.TodosPage todoModel -> Todo.view todoModel (TodoMsg >> dispatch)
     | Page.RecipesPage recipesModel -> Recipe.view recipesModel (RecipesMsg >> dispatch)
 
