@@ -5,8 +5,8 @@ open EntityFrameworkCore.FSharp.Extensions
 
 open Shared
 
-type ThisIsNotAContext() =
-    inherit DbContext()
+type ThisIsNotAContext =
+    inherit DbContext
 
     [<DefaultValue>]
     val mutable todos: DbSet<Todo>
@@ -24,8 +24,11 @@ type ThisIsNotAContext() =
 
     override _.OnModelCreating builder = builder.RegisterOptionTypes()
 
-    override __.OnConfiguring(options: DbContextOptionsBuilder) : unit =
-        options
-            .UseSqlite("Data Source=recipes.db")
-            .UseFSharpTypes()
-        |> ignore
+    // override __.OnConfiguring(options: DbContextOptionsBuilder) : unit =
+    //     options
+    //         .UseSqlite("Data Source=recipes.db")
+    //         .UseFSharpTypes()
+    //     |> ignore
+
+    new() = { inherit DbContext() }
+    new(options: DbContextOptions<ThisIsNotAContext>) = { inherit DbContext(options) }
