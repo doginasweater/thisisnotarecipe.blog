@@ -5,7 +5,6 @@ open Feliz
 [<AutoOpen>]
 module Button =
   type ButtonType =
-    | None
     | Primary
     | Secondary
     | Accent
@@ -22,14 +21,12 @@ module Button =
     | Tiny
 
   type ButtonVariant =
-    | Regular
     | Link
     | Outline
     | Active
 
   let mapBtnClass type' =
     match type' with
-    | None -> ""
     | Primary -> "btn-primary"
     | Secondary -> "btn-secondary"
     | Accent -> "btn-accent"
@@ -48,17 +45,17 @@ module Button =
 
   let mapBtnVariant variant =
     match variant with
-    | Regular -> ""
     | Link -> "btn-link"
     | Outline -> "btn-outline"
     | Active -> "btn-active"
 
   type ButtonProps =
-    { btnType: ButtonType
-      size: ButtonSize
-      variant: ButtonVariant
+    { btnType: ButtonType option
+      size: ButtonSize option
+      variant: ButtonVariant option
       isDisabled: bool
       isGlass: bool
+      isLoading: bool
       text: string
       classes: string list
       onClick: (Browser.Types.MouseEvent -> unit) option
@@ -68,9 +65,15 @@ module Button =
     Html.button [
       prop.classes [
         "btn"
-        mapBtnClass props.btnType
-        mapBtnVariant props.variant
-        mapBtnSize props.size
+        if props.btnType.IsSome then
+          mapBtnClass props.btnType.Value
+        if props.variant.IsSome then
+          mapBtnVariant props.variant.Value
+        if props.size.IsSome then
+          mapBtnSize props.size.Value
+        if props.isDisabled then "btn-disabled"
+        if props.isGlass then "glass"
+        if props.isLoading then "loading"
         yield! props.classes
       ]
       yield! props.extraProps
@@ -82,31 +85,35 @@ module Button =
   type ButtonBuilder() =
     let defaultButton =
       { btnType = None
-        size = Normal
-        variant = Regular
+        size = None
+        variant = None
         isDisabled = false
         isGlass = false
+        isLoading = false
         text = ""
         classes = []
-        onClick = Option.None
+        onClick = None
         extraProps = [] }
 
     member _.Yield _ = defaultButton
 
     [<CustomOperation("btnType", MaintainsVariableSpace = true)>]
-    member _.btnType(props, btnType) = { props with btnType = btnType }
+    member _.btnType(props, btnType) = { props with btnType = Some btnType }
 
     [<CustomOperation("size", MaintainsVariableSpace = true)>]
-    member _.size(props, size) = { props with size = size }
+    member _.size(props, size) = { props with size = Some size }
 
     [<CustomOperation("variant", MaintainsVariableSpace = true)>]
-    member _.variant(props, variant) = { props with variant = variant }
+    member _.variant(props, variant) = { props with variant = Some variant }
 
     [<CustomOperation("disabled", MaintainsVariableSpace = true)>]
     member _.disabled(props, disabled) = { props with isDisabled = disabled }
 
     [<CustomOperation("glass", MaintainsVariableSpace = true)>]
     member _.glass(props, glass) = { props with isGlass = glass }
+
+    [<CustomOperation("loading", MaintainsVariableSpace = true)>]
+    member _.loading(props, loading) = { props with isLoading = loading }
 
     [<CustomOperation("props", MaintainsVariableSpace = true)>]
     member _.extraProps(props, extra) = { props with extraProps = extra }
