@@ -2,13 +2,13 @@ module Router
 
 [<RequireQualifiedAccess>]
 type Route =
-    | Todo
-    | Recipes
+  | Todo
+  | Recipes
 
 open Elmish.UrlParser
 
 let routeParser: Parser<Route -> Route, Route> =
-    oneOf [
-        map Route.Todo (s "todos")
-        map Route.Recipes top
-    ]
+  oneOf [
+    map Route.Todo (s "todos")
+    map Route.Recipes top
+  ]

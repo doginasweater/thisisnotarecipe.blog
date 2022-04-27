@@ -7,9 +7,9 @@
   <ItemGroup>
     <None Include="index.html" />
     <None Include="paket.references" />
-    <Compile Include="Components.fs" />
-    <Compile Include="Recipe.fs" />
-    <Compile Include="Todo.fs" />
+    <Compile Include="Components/Inputs.fs" />
+    <Compile Include="Pages/Recipe.fs" />
+    <Compile Include="Pages/Todo.fs" />
     <Compile Include="Router.fs" />
     <Compile Include="Main.fs" />
     <Compile Include="App.fs" />

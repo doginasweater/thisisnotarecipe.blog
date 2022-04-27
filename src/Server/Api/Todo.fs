@@ -4,27 +4,23 @@ open DbContext
 open EntityFrameworkCore.FSharp.DbContextHelpers
 open Shared
 
-let emptyTodo =
-    { Id = (System.Guid.NewGuid())
-      Description = "" }
-
 let getTodos (ctx: ThisIsNotAContext) =
-    fun _ -> async { return ctx.Todos |> List.ofSeq }
+  fun _ -> async { return ctx.Todos |> List.ofSeq }
 
 let addTodo (ctx: ThisIsNotAContext) =
-    fun todo ->
-        async {
-            do! todo |> addEntityAsync ctx
-            do! saveChangesAsync ctx
+  fun todo ->
+    async {
+      do! todo |> addEntityAsync ctx
+      do! saveChangesAsync ctx
 
-            return todo
-        }
+      return todo
+    }
 
 let todosReader =
-    reader {
-        let! ctx = resolve<ThisIsNotAContext> ()
+  reader {
+    let! ctx = resolve<ThisIsNotAContext> ()
 
-        return
-            { getTodos = getTodos ctx
-              addTodo = addTodo ctx }
-    }
+    return
+      { getTodos = getTodos ctx
+        addTodo = addTodo ctx }
+  }
