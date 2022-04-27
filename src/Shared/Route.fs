@@ -1,4 +1,4 @@
-namespace Shared
+namespace rec Shared
 
 module Route =
   let builder typeName methodName =

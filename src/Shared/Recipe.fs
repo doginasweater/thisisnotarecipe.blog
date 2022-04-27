@@ -1,4 +1,4 @@
-namespace Shared
+namespace rec Shared
 
 open System
 
@@ -7,7 +7,26 @@ type Recipe =
   { Id: Guid
     Title: string
     Description: string
-    Category: string }
+    Ingredients: Ingredient list
+    Steps: Step list
+    Categories: Category list
+    Tags: Tag list }
+
+[<CLIMutable>]
+type Step =
+  { Id: Guid
+    RecipeId: Guid
+    Recipe: Recipe
+    Order: int
+    Text: string }
+
+[<CLIMutable>]
+type Ingredient =
+  { Id: Guid
+    RecipeId: Guid
+    Recipe: Recipe
+    Text: string
+    Type: string }
 
 module Recipe =
   let isValid (description: string) =

@@ -1,4 +1,4 @@
-namespace Shared
+namespace rec Shared
 
 open System
 
