@@ -6,6 +6,7 @@
         "test:live": "webpack-dev-server --config webpack.tests.config.js"
     },
     "dependencies": {
+        "daisyui": "^2.14.2",
         "react": "^18.0.0",
         "react-dom": "^18.0.0"
     },
@@ -20,7 +21,7 @@
         "mini-css-extract-plugin": "^2.6.0",
         "postcss": "^8.4.12",
         "postcss-loader": "^6.2.1",
-        "remotedev": "^0.2.9",
+        "remotedev": "^0.2.7",
         "sass": "^1.50.1",
         "sass-loader": "^12.6.0",
         "source-map-loader": "^3.0.1",

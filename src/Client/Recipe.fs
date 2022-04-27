@@ -62,44 +62,27 @@ let renderAddingRecipe dispatch =
                 prop.text "adding"
                 prop.classes [ "flex"; "gap-4" ]
                 prop.children [
-                    Html.label [
-                        prop.classes [ "block" ]
-                        prop.children [
-                            Html.span "Title"
-                            Html.input [
-                                prop.type' "text"
-                                prop.onChange (fun x -> SetTitleInput x |> dispatch)
-                                prop.classes [
-                                    "form-input"
-                                    "dark:bg-slate-900"
-                                    "dark:border-0"
-                                    "dark:border-b"
-                                    "block"
-                                ]
-                            ]
+                    Components.textInput "Title" [ prop.onChange (fun x -> SetTitleInput x |> dispatch) ]
+                    Components.textInput "Description" [ prop.onChange (fun x -> SetDescriptionInput x |> dispatch) ]
+                    Html.button [
+                        prop.classes [
+                            "btn"
+                            "btn-secondary"
+                            "self-end"
                         ]
+                        prop.onClick (fun _ -> CancelAddRecipe |> dispatch)
+                        prop.text "Cancel"
                     ]
-                    Html.label [
-                        prop.classes [ "block" ]
-                        prop.children [
-                            Html.span "Description"
-                            Html.input [
-                                prop.type' "text"
-                                prop.onChange (fun x -> SetDescriptionInput x |> dispatch)
-                                prop.classes [
-                                    "form-input"
-                                    "dark:bg-slate-900"
-                                    "dark:border-0"
-                                    "dark:border-b"
-                                    "block"
-                                ]
-                            ]
+                    Html.button [
+                        prop.classes [
+                            "btn"
+                            "btn-primary"
+                            "self-end"
                         ]
+                        prop.onClick (fun _ -> CancelAddRecipe |> dispatch)
+                        prop.text "Add"
                     ]
                 ]
-            ]
-            Html.div [
-                Components.dangerButton "Cancel" [ prop.onClick (fun _ -> CancelAddRecipe |> dispatch) ]
             ]
         ]
     ]
@@ -110,10 +93,21 @@ let view model dispatch =
             renderAddingRecipe dispatch
         else if model.Recipes.Length = 0 then
             Html.div "No recipes to display"
+
+            Html.button [
+                prop.onClick (fun _ -> AddRecipe |> dispatch)
+                prop.classes [ "btn"; "btn-primary" ]
+                prop.text "Add recipe"
+            ]
         else
             Html.ol [
                 for recipe in model.Recipes do
                     Html.li recipe.Description
             ]
-        Components.primaryButton "Add recipe" [ prop.onClick (fun _ -> AddRecipe |> dispatch) ]
+
+            Html.button [
+                prop.onClick (fun _ -> AddRecipe |> dispatch)
+                prop.classes [ "btn"; "btn-primary" ]
+                prop.text "Add recipe"
+            ]
     ]

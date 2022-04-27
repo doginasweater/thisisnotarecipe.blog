@@ -2,47 +2,35 @@ module Components
 
 open Feliz
 
-type ButtonType =
-    | Success
-    | Danger
-    | Info
-    | Warning
-    | Primary
-    | Secondary
-
 [<RequireQualifiedAccess>]
 module Components =
-    let button (buttonType: ButtonType) (text: string) (props: IReactProperty list) =
-        let color =
-            match buttonType with
-            | Primary -> [ "bg-cyan-400" ]
-            | Danger ->
-                [ "bg-red-700"
-                  "text-white"
-                  "dark:text-white"
-                  "border-red-500" ]
-            | Success -> [ "" ]
-            | Info -> [ "" ]
-            | Warning -> [ "" ]
-            | Secondary -> [ "" ]
-
-        let finalProps =
+    let textInput (labelText: string) (props: IReactProperty list) =
+        let inputProps =
             props
-            @ [ prop.type' "button"
-                prop.classes (
-                    [ "px-4"
-                      "py-2"
-                      "rounded"
-                      "dark:text-slate-800" ]
-                    @ color
-                )
-                prop.text text ]
+            @ [ prop.type'.text
+                prop.classes [
+                    "input"
+                    "input-bordered"
+                    "w-full"
+                    "max-w-xs"
+                ] ]
 
-        Html.button finalProps
-
-    let primaryButton = button Primary
-    let dangerButton = button Danger
-    let successButton = button Success
-    let infoButton = button Info
-    let warningButton = button Warning
-    let secondaryButton = button Secondary
+        Html.div [
+            prop.classes [
+                "form-control"
+                "w-full"
+                "max-w-xs"
+            ]
+            prop.children [
+                Html.label [
+                    prop.classes [ "label" ]
+                    prop.children [
+                        Html.span [
+                            prop.classes [ "label-text" ]
+                            prop.text labelText
+                        ]
+                    ]
+                ]
+                Html.input inputProps
+            ]
+        ]

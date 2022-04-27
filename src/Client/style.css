@@ -11,8 +11,6 @@
     }
 
     body {
-        @apply bg-white;
-        @apply dark:bg-slate-900;
         height: 100%;
         min-height: 100%;
         min-width: 100%;

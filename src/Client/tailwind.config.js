@@ -6,5 +6,16 @@ module.exports = {
   plugins: [
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
+    require('daisyui'),
   ],
+  daisyui: {
+    styled: true,
+    themes: ['cupcake', 'synthwave', 'night', 'dark'],
+    base: true,
+    utils: true,
+    logs: true,
+    rtl: false,
+    prefix: "",
+    darkTheme: "synthwave",
+  },
 }
