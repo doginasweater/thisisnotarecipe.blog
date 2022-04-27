@@ -58,69 +58,13 @@ let renderBody model dispatch =
 
 open Feliz
 open Fable.Core.JsInterop
+open Components
 
 importAll "./style.css"
 
-let themePicker =
-  Html.select [
-    prop.classes [
-      "select"
-      "select-bordered"
-    ]
-    prop.custom ("data-choose-theme", true)
-    prop.children [
-      Html.option [
-        prop.value "dark"
-        prop.text "Dark"
-      ]
-      Html.option [
-        prop.value "synthwave"
-        prop.text "Synthwave"
-      ]
-      Html.option [
-        prop.value "night"
-        prop.text "Night"
-      ]
-      Html.option [
-        prop.value "cupcake"
-        prop.text "Cupcake"
-      ]
-    ]
-  ]
-
 let view (model: Model) (dispatch: Dispatch<Msg>) =
   React.fragment [
-    Html.header [
-      prop.classes [
-        "p-8"
-        "border-b"
-        "border-gray-400"
-        "prose"
-        "dark:prose-invert"
-        "max-w-none"
-      ]
-      prop.children [
-        Html.div [
-          prop.classes [
-            "flex"
-            "justify-between"
-          ]
-          prop.children [
-            Html.a [
-              prop.href "/"
-              prop.classes [ "block"; "no-underline" ]
-              prop.children [
-                Html.h1 [
-                  prop.classes [ "mb-0" ]
-                  prop.text "This Is Not a Recipe Blog"
-                ]
-              ]
-            ]
-            themePicker
-          ]
-        ]
-      ]
-    ]
+    Html.header [ Navbar.navbar ]
 
     Html.div [
       prop.classes [
@@ -130,6 +74,7 @@ let view (model: Model) (dispatch: Dispatch<Msg>) =
         "p-8"
         "prose"
         "dark:prose-invert"
+        "bg-base-300"
       ]
       prop.text "i am a left menu"
     ]
@@ -154,13 +99,12 @@ let view (model: Model) (dispatch: Dispatch<Msg>) =
           prop.classes [
             "flex-none"
             "flex"
-            "justify-between"
+            "justify-end"
             "prose"
             "dark:prose-invert"
             "max-w-none"
           ]
           prop.children [
-            Html.div "this is a footer"
             Html.div [
               Html.a [
                 prop.href "https://github.com/doginasweater/thisisnotarecipe.blog"

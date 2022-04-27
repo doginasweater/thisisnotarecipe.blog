@@ -64,50 +64,42 @@ let renderAddingRecipe dispatch =
         prop.children [
           Inputs.text "Title" [ prop.onChange (fun x -> SetTitleInput x |> dispatch) ]
           Inputs.text "Description" [ prop.onChange (fun x -> SetDescriptionInput x |> dispatch) ]
-          Html.button [
-            prop.classes [
-              "btn"
-              "btn-secondary"
-              "self-end"
-            ]
-            prop.onClick (fun _ -> CancelAddRecipe |> dispatch)
-            prop.text "Cancel"
-          ]
-          Html.button [
-            prop.classes [
-              "btn"
-              "btn-primary"
-              "self-end"
-            ]
-            prop.onClick (fun _ -> CancelAddRecipe |> dispatch)
-            prop.text "Add"
-          ]
+          button {
+            btnType Secondary
+            classes [ "self-end" ]
+            text "Cancel"
+            onClick (fun _ -> CancelAddRecipe |> dispatch)
+          }
+          button {
+            btnType Primary
+            classes [ "self-end" ]
+            onClick (fun _ -> CancelAddRecipe |> dispatch)
+            text "Add"
+          }
         ]
       ]
     ]
   ]
 
 let view model dispatch =
+  let addRecipeButton =
+    button {
+      onClick (fun _ -> AddRecipe |> dispatch)
+      btnType Primary
+      text "Add recipe"
+    }
+
   Html.div [
     if model.AddingRecipe then
       renderAddingRecipe dispatch
     else if model.Recipes.Length = 0 then
       Html.div "No recipes to display"
-
-      Html.button [
-        prop.onClick (fun _ -> AddRecipe |> dispatch)
-        prop.classes [ "btn"; "btn-primary" ]
-        prop.text "Add recipe"
-      ]
+      addRecipeButton
     else
       Html.ol [
         for recipe in model.Recipes do
           Html.li recipe.Description
       ]
 
-      Html.button [
-        prop.onClick (fun _ -> AddRecipe |> dispatch)
-        prop.classes [ "btn"; "btn-primary" ]
-        prop.text "Add recipe"
-      ]
+      addRecipeButton
   ]
