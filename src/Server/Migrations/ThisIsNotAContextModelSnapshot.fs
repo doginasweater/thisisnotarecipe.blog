@@ -15,15 +15,47 @@ type ThisIsNotAContextModelSnapshot() =
     override this.BuildModel(modelBuilder: ModelBuilder) =
         modelBuilder.HasAnnotation("ProductVersion", "6.0.4") |> ignore
 
-        modelBuilder.Entity("Shared.Category", (fun b ->
+        modelBuilder.Entity("CategoryRecipe", (fun b ->
 
-            b.Property<Guid>("Id")
+            b.Property<Guid>("CategoriesId")
                 .IsRequired(true)
-                .ValueGeneratedOnAdd()
                 .HasColumnType("TEXT")
                 |> ignore
 
-            b.Property<string>("Name")
+            b.Property<Guid>("RecipesId")
+                .IsRequired(true)
+                .HasColumnType("TEXT")
+                |> ignore
+
+            b.HasKey("CategoriesId", "RecipesId")
+                |> ignore
+
+
+            b.HasIndex("RecipesId")
+                |> ignore
+
+            b.ToTable("CategoryRecipe") |> ignore
+
+        )) |> ignore
+
+        modelBuilder.Entity("Shared.Author", (fun b ->
+
+            b.Property<Guid>("Id")
+                .IsRequired(true)
+                .HasColumnType("TEXT")
+                |> ignore
+
+            b.Property<string>("Email")
+                .IsRequired(true)
+                .HasColumnType("TEXT")
+                |> ignore
+
+            b.Property<string>("FirstName")
+                .IsRequired(true)
+                .HasColumnType("TEXT")
+                |> ignore
+
+            b.Property<string>("LastName")
                 .IsRequired(true)
                 .HasColumnType("TEXT")
                 |> ignore
@@ -40,6 +72,26 @@ type ThisIsNotAContextModelSnapshot() =
             b.HasIndex("RecipeId")
                 |> ignore
 
+            b.ToTable("Authors") |> ignore
+
+        )) |> ignore
+
+        modelBuilder.Entity("Shared.Category", (fun b ->
+
+            b.Property<Guid>("Id")
+                .IsRequired(true)
+                .HasColumnType("TEXT")
+                |> ignore
+
+            b.Property<string>("Name")
+                .IsRequired(true)
+                .HasColumnType("TEXT")
+                |> ignore
+
+            b.HasKey("Id")
+                |> ignore
+
+
             b.ToTable("Categories") |> ignore
 
         )) |> ignore
@@ -48,7 +100,11 @@ type ThisIsNotAContextModelSnapshot() =
 
             b.Property<Guid>("Id")
                 .IsRequired(true)
-                .ValueGeneratedOnAdd()
+                .HasColumnType("TEXT")
+                |> ignore
+
+            b.Property<Guid>("Recipe")
+                .IsRequired(true)
                 .HasColumnType("TEXT")
                 |> ignore
 
@@ -91,7 +147,17 @@ type ThisIsNotAContextModelSnapshot() =
                 .HasColumnType("TEXT")
                 |> ignore
 
+            b.Property<string option>("Source")
+                .IsRequired(false)
+                .HasColumnType("TEXT")
+                |> ignore
+
             b.Property<string>("Title")
+                .IsRequired(true)
+                .HasColumnType("TEXT")
+                |> ignore
+
+            b.Property<Guid>("VersionId")
                 .IsRequired(true)
                 .HasColumnType("TEXT")
                 |> ignore
@@ -99,6 +165,9 @@ type ThisIsNotAContextModelSnapshot() =
             b.HasKey("Id")
                 |> ignore
 
+
+            b.HasIndex("VersionId")
+                |> ignore
 
             b.ToTable("Recipes") |> ignore
 
@@ -108,7 +177,6 @@ type ThisIsNotAContextModelSnapshot() =
 
             b.Property<Guid>("Id")
                 .IsRequired(true)
-                .ValueGeneratedOnAdd()
                 .HasColumnType("TEXT")
                 |> ignore
 
@@ -122,6 +190,11 @@ type ThisIsNotAContextModelSnapshot() =
                 .HasColumnType("TEXT")
                 |> ignore
 
+            b.Property<Nullable<Guid>>("RecipeId1")
+                .IsRequired(false)
+                .HasColumnType("TEXT")
+                |> ignore
+
             b.Property<string>("Text")
                 .IsRequired(true)
                 .HasColumnType("TEXT")
@@ -131,7 +204,7 @@ type ThisIsNotAContextModelSnapshot() =
                 |> ignore
 
 
-            b.HasIndex("RecipeId")
+            b.HasIndex("RecipeId1")
                 |> ignore
 
             b.ToTable("Steps") |> ignore
@@ -187,15 +260,50 @@ type ThisIsNotAContextModelSnapshot() =
             b.ToTable("Todos") |> ignore
 
         )) |> ignore
-        modelBuilder.Entity("Shared.Category", (fun b ->
+
+        modelBuilder.Entity("Shared.Version", (fun b ->
+
+            b.Property<Guid>("Id")
+                .IsRequired(true)
+                .HasColumnType("TEXT")
+                |> ignore
+
+            b.Property<string>("Title")
+                .IsRequired(true)
+                .HasColumnType("TEXT")
+                |> ignore
+
+            b.HasKey("Id")
+                |> ignore
+
+
+            b.ToTable("Versions") |> ignore
+
+        )) |> ignore
+        modelBuilder.Entity("CategoryRecipe", (fun b ->
+            b.HasOne("Shared.Category", null)
+                .WithMany()
+                .HasForeignKey("CategoriesId")
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired()
+                |> ignore
             b.HasOne("Shared.Recipe", null)
-                .WithMany("Categories")
+                .WithMany()
+                .HasForeignKey("RecipesId")
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired()
+                |> ignore
+
+        )) |> ignore
+        modelBuilder.Entity("Shared.Author", (fun b ->
+            b.HasOne("Shared.Recipe", null)
+                .WithMany("Author")
                 .HasForeignKey("RecipeId")
                 |> ignore
 
         )) |> ignore
         modelBuilder.Entity("Shared.Ingredient", (fun b ->
-            b.HasOne("Shared.Recipe", "Recipe")
+            b.HasOne("Shared.Recipe", null)
                 .WithMany("Ingredients")
                 .HasForeignKey("RecipeId")
                 .OnDelete(DeleteBehavior.Cascade)
@@ -203,12 +311,17 @@ type ThisIsNotAContextModelSnapshot() =
                 |> ignore
 
         )) |> ignore
+        modelBuilder.Entity("Shared.Recipe", (fun b ->
+            b.HasOne("Shared.Version", null)
+                .WithMany("Iterations")
+                .HasForeignKey("VersionId")
+                |> ignore
+
+        )) |> ignore
         modelBuilder.Entity("Shared.Step", (fun b ->
             b.HasOne("Shared.Recipe", "Recipe")
                 .WithMany("Steps")
-                .HasForeignKey("RecipeId")
-                .OnDelete(DeleteBehavior.Cascade)
-                .IsRequired()
+                .HasForeignKey("RecipeId1")
                 |> ignore
 
         )) |> ignore
@@ -221,7 +334,7 @@ type ThisIsNotAContextModelSnapshot() =
         )) |> ignore
         modelBuilder.Entity("Shared.Recipe", (fun b ->
 
-            b.Navigation("Categories")
+            b.Navigation("Author")
             |> ignore
 
             b.Navigation("Ingredients")
@@ -231,6 +344,11 @@ type ThisIsNotAContextModelSnapshot() =
             |> ignore
 
             b.Navigation("Tags")
+            |> ignore
+        )) |> ignore
+        modelBuilder.Entity("Shared.Version", (fun b ->
+
+            b.Navigation("Iterations")
             |> ignore
         )) |> ignore
 

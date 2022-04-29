@@ -9,6 +9,13 @@ type ThisIsNotAContext =
   inherit DbContext
 
   [<DefaultValue>]
+  val mutable authors: DbSet<Author>
+
+  member this.Authors
+    with get () = this.authors
+    and set v = this.authors <- v
+
+  [<DefaultValue>]
   val mutable categories: DbSet<Category>
 
   member this.Categories
@@ -49,6 +56,13 @@ type ThisIsNotAContext =
   member this.Todos
     with get () = this.todos
     and set v = this.todos <- v
+
+  [<DefaultValue>]
+  val mutable versions: DbSet<Version>
+
+  member this.Versions
+    with get () = this.versions
+    and set v = this.versions <- v
 
   override _.OnModelCreating builder =
     builder.RegisterOptionTypes()
