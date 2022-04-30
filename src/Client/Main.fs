@@ -25,6 +25,8 @@ type Msg =
 let setRoute (optRoute: Route option) model =
   let model = { model with CurrentRoute = optRoute }
 
+  printfn "route %A" optRoute
+
   match optRoute with
   | None -> { model with ActivePage = Page.NotFound }, Cmd.none
   | Some Todo ->
@@ -52,10 +54,15 @@ let update (msg: Msg) (model: Model) =
     let todoModel, todoCmd = Todo.update todoMsg todoModel
 
     { model with ActivePage = Page.TodosPage todoModel }, Cmd.map TodoMsg todoCmd
-  | Page.RecipeListPage recipesModel, RecipeListMsg recipesMsg ->
-    let recipesModel, recipesCmd = RecipeList.update recipesMsg recipesModel
+  | Page.RecipeListPage recipeListModel, RecipeListMsg recipeListMsg ->
+    let recipeListModel, RecipeListCmdd =
+      RecipeList.update recipeListMsg recipeListModel
 
-    { model with ActivePage = Page.RecipeListPage recipesModel }, Cmd.map RecipeListMsg recipesCmd
+    { model with ActivePage = Page.RecipeListPage recipeListModel }, Cmd.map RecipeListMsg RecipeListCmdd
+  | Page.RecipePage recipeModel, RecipeMsg recipeMsg ->
+    let recipeModel, recipeCmd = Recipe.update recipeMsg recipeModel
+
+    { model with ActivePage = Page.RecipePage recipeModel }, Cmd.map RecipeMsg recipeCmd
   | Page.NotFound, _ -> model, Cmd.none
   | _, _ -> { model with ActivePage = Page.NotFound }, Cmd.none
 

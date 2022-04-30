@@ -1,6 +1,7 @@
 module Pages.RecipeList
 
 open Elmish
+open Elmish.Navigation
 open Fable.Remoting.Client
 open Shared
 open Components
@@ -37,7 +38,7 @@ let init () : Model * Cmd<Msg> =
 let update (msg: Msg) (model: Model) =
   match msg with
   | GotRecipes recipes -> { model with Recipes = recipes }, Cmd.none
-  | AddRecipe -> { model with AddingRecipe = true }, Cmd.none
+  | AddRecipe -> model, Navigation.newUrl "/recipe"
   | CancelAddRecipe ->
     { model with
         AddingRecipe = false
@@ -62,8 +63,14 @@ let renderAddingRecipe dispatch =
         prop.text "adding"
         prop.classes [ "flex"; "gap-4" ]
         prop.children [
-          Inputs.text "Title" [ prop.onChange (fun x -> SetTitleInput x |> dispatch) ]
-          Inputs.text "Description" [ prop.onChange (fun x -> SetDescriptionInput x |> dispatch) ]
+          input {
+            label "Title"
+            onChange (fun x -> SetTitleInput x |> dispatch)
+          }
+          input {
+            label "Description"
+            onChange (fun x -> SetDescriptionInput x |> dispatch)
+          }
           button {
             btnType Secondary
             classes [ "self-end" ]

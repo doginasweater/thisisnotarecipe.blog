@@ -1,6 +1,7 @@
 module Pages.Recipe
 
 open Elmish
+open Elmish.Navigation
 open Fable.Remoting.Client
 open System
 open Shared
@@ -16,7 +17,9 @@ type Model =
   { Recipe: Recipe option
     LoadingState: RecipeLoadingState }
 
-type Msg = GotRecipe of Recipe option
+type Msg =
+  | GotRecipe of Recipe option
+  | Cancel
 
 let recipesApi =
   Remoting.createApi ()
@@ -38,6 +41,7 @@ let init (id: string option) : Model * Cmd<Msg> =
 let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
   match msg with
   | GotRecipe recipe -> { model with Recipe = recipe }, Cmd.none
+  | Cancel -> model, Navigation.newUrl "/"
 
 open Feliz
 
@@ -53,4 +57,9 @@ let view (model: Model) dispatch =
     input { label "Description" }
     input { label "Source" }
     input { label "Author" }
+    button {
+      text "Cancel"
+      btnType Secondary
+      onClick (fun _ -> Cancel |> dispatch)
+    }
   ]
