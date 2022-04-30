@@ -4,34 +4,43 @@ open Elmish
 open Fable.React
 
 open Pages
+open Router
 
 [<RequireQualifiedAccess>]
 type Page =
   | TodosPage of Todo.Model
-  | RecipesPage of Recipe.Model
+  | RecipeListPage of RecipeList.Model
+  | RecipePage of Recipe.Model
   | NotFound
 
 type Model =
   { ActivePage: Page
-    CurrentRoute: Router.Route option }
+    CurrentRoute: Route option }
 
 type Msg =
   | TodoMsg of Todo.Msg
-  | RecipesMsg of Recipe.Msg
+  | RecipeListMsg of RecipeList.Msg
+  | RecipeMsg of Recipe.Msg
 
-let setRoute (optRoute: Router.Route option) model =
+let setRoute (optRoute: Route option) model =
   let model = { model with CurrentRoute = optRoute }
 
   match optRoute with
   | None -> { model with ActivePage = Page.NotFound }, Cmd.none
-  | Some Router.Route.Todo ->
+  | Some Todo ->
     let todoModel, todoCmd = Todo.init ()
     { model with ActivePage = Page.TodosPage todoModel }, Cmd.map TodoMsg todoCmd
-  | Some Router.Route.Recipes ->
-    let recipeModel, recipeCmd = Recipe.init ()
-    { model with ActivePage = Page.RecipesPage recipeModel }, Cmd.map RecipesMsg recipeCmd
+  | Some NewRecipe ->
+    let recipeModel, recipeCmd = Recipe.init None
+    { model with ActivePage = Page.RecipePage recipeModel }, Cmd.map RecipeMsg recipeCmd
+  | Some (Recipe recipeId) ->
+    let recipeModel, recipeCmd = Recipe.init (Some recipeId)
+    { model with ActivePage = Page.RecipePage recipeModel }, Cmd.map RecipeMsg recipeCmd
+  | Some RecipeList ->
+    let recipeListModel, recipeListCmd = RecipeList.init ()
+    { model with ActivePage = Page.RecipeListPage recipeListModel }, Cmd.map RecipeListMsg recipeListCmd
 
-let init (location: Router.Route option) =
+let init (location: Route option) =
   setRoute
     location
     { ActivePage = Page.NotFound
@@ -43,10 +52,10 @@ let update (msg: Msg) (model: Model) =
     let todoModel, todoCmd = Todo.update todoMsg todoModel
 
     { model with ActivePage = Page.TodosPage todoModel }, Cmd.map TodoMsg todoCmd
-  | Page.RecipesPage recipesModel, RecipesMsg recipesMsg ->
-    let recipesModel, recipesCmd = Recipe.update recipesMsg recipesModel
+  | Page.RecipeListPage recipesModel, RecipeListMsg recipesMsg ->
+    let recipesModel, recipesCmd = RecipeList.update recipesMsg recipesModel
 
-    { model with ActivePage = Page.RecipesPage recipesModel }, Cmd.map RecipesMsg recipesCmd
+    { model with ActivePage = Page.RecipeListPage recipesModel }, Cmd.map RecipeListMsg recipesCmd
   | Page.NotFound, _ -> model, Cmd.none
   | _, _ -> { model with ActivePage = Page.NotFound }, Cmd.none
 
@@ -54,7 +63,8 @@ let renderBody model dispatch =
   match model.ActivePage with
   | Page.NotFound -> str "Page not found?"
   | Page.TodosPage todoModel -> Todo.view todoModel (TodoMsg >> dispatch)
-  | Page.RecipesPage recipesModel -> Recipe.view recipesModel (RecipesMsg >> dispatch)
+  | Page.RecipePage recipeModel -> Recipe.view recipeModel (RecipeMsg >> dispatch)
+  | Page.RecipeListPage recipesModel -> RecipeList.view recipesModel (RecipeListMsg >> dispatch)
 
 open Feliz
 open Fable.Core.JsInterop

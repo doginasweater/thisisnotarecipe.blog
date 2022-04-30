@@ -4,22 +4,6 @@ open Feliz
 
 [<AutoOpen>]
 module Button =
-  type ButtonType =
-    | Primary
-    | Secondary
-    | Accent
-    | Info
-    | Success
-    | Warning
-    | Error
-    | Ghost
-
-  type ButtonSize =
-    | Large
-    | Normal
-    | Small
-    | Tiny
-
   type ButtonVariant =
     | Link
     | Outline
@@ -39,7 +23,7 @@ module Button =
   let mapBtnSize size =
     match size with
     | Large -> "btn-lg"
-    | Normal -> "btn-md"
+    | Medium -> "btn-md"
     | Small -> "btn-sm"
     | Tiny -> "btn-xs"
 
@@ -50,8 +34,8 @@ module Button =
     | Active -> "btn-active"
 
   type ButtonProps =
-    { btnType: ButtonType option
-      size: ButtonSize option
+    { btnType: ThemeColor option
+      size: Size option
       variant: ButtonVariant option
       isDisabled: bool
       isGlass: bool

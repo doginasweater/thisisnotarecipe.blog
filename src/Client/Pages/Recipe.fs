@@ -2,104 +2,55 @@ module Pages.Recipe
 
 open Elmish
 open Fable.Remoting.Client
+open System
 open Shared
 open Components
 
-type Model =
-  { Recipes: Recipe list
-    AddingRecipe: bool
-    TitleInput: string
-    DescriptionInput: string }
+type RecipeLoadingState =
+  | NewRecipe
+  | Loading
+  | Loaded
+  | NotFound
 
-type Msg =
-  | GotRecipes of Recipe list
-  | AddRecipe
-  | CancelAddRecipe
-  | SetTitleInput of string
-  | SetDescriptionInput of string
+type Model =
+  { Recipe: Recipe option
+    LoadingState: RecipeLoadingState }
+
+type Msg = GotRecipe of Recipe option
 
 let recipesApi =
   Remoting.createApi ()
   |> Remoting.withRouteBuilder Route.builder
   |> Remoting.buildProxy<IRecipeApi>
 
-let init () : Model * Cmd<Msg> =
+let init (id: string option) : Model * Cmd<Msg> =
   let model =
-    { Recipes = []
-      AddingRecipe = false
-      TitleInput = ""
-      DescriptionInput = "" }
+    { Recipe = None
+      LoadingState = NewRecipe }
 
-  let cmd = Cmd.OfAsync.perform recipesApi.getRecipes () GotRecipes
+  match id with
+  | None -> model, Cmd.none
+  | Some id ->
+    match Guid.TryParse id with
+    | true, recipeId -> model, Cmd.OfAsync.perform recipesApi.getRecipe (RecipeId recipeId) GotRecipe
+    | false, _ -> { model with LoadingState = NotFound }, Cmd.none
 
-  model, cmd
-
-let update msg model =
+let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
   match msg with
-  | GotRecipes recipes -> { model with Recipes = recipes }, Cmd.none
-  | AddRecipe -> { model with AddingRecipe = true }, Cmd.none
-  | CancelAddRecipe ->
-    { model with
-        AddingRecipe = false
-        TitleInput = ""
-        DescriptionInput = "" },
-    Cmd.none
-  | SetTitleInput value -> { model with TitleInput = value }, Cmd.none
-  | SetDescriptionInput value -> { model with DescriptionInput = value }, Cmd.none
+  | GotRecipe recipe -> { model with Recipe = recipe }, Cmd.none
 
 open Feliz
 
-let renderAddingRecipe dispatch =
+let title model =
+  match model.Recipe with
+  | Some r -> Html.h1 r.Title
+  | None -> Html.h1 "New Recipe"
+
+let view (model: Model) dispatch =
   Html.div [
-    prop.classes [
-      "flex"
-      "flex-col"
-      "gap-4"
-      "mb-4"
-    ]
-    prop.children [
-      Html.div [
-        prop.text "adding"
-        prop.classes [ "flex"; "gap-4" ]
-        prop.children [
-          Inputs.text "Title" [ prop.onChange (fun x -> SetTitleInput x |> dispatch) ]
-          Inputs.text "Description" [ prop.onChange (fun x -> SetDescriptionInput x |> dispatch) ]
-          button {
-            btnType Secondary
-            classes [ "self-end" ]
-            text "Cancel"
-            onClick (fun _ -> CancelAddRecipe |> dispatch)
-          }
-          button {
-            btnType Primary
-            classes [ "self-end" ]
-            onClick (fun _ -> CancelAddRecipe |> dispatch)
-            text "Add"
-          }
-        ]
-      ]
-    ]
-  ]
-
-let view model dispatch =
-  let addRecipeButton =
-    button {
-      onClick (fun _ -> AddRecipe |> dispatch)
-      btnType Primary
-      text "Add recipe"
-    }
-
-  Html.div [
-    if model.AddingRecipe then
-      renderAddingRecipe dispatch
-    else if model.Recipes.Length = 0 then
-      Html.div "No recipes to display"
-      addRecipeButton
-    else
-      Html.ol [
-        for recipe in model.Recipes do
-          Html.li recipe.Description
-      ]
-
-      addRecipeButton
+    title model
+    input { label "Title" }
+    input { label "Description" }
+    input { label "Source" }
+    input { label "Author" }
   ]

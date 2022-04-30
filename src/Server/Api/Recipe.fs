@@ -8,7 +8,7 @@ let getRecipes (ctx: ThisIsNotAContext) =
   fun () -> async { return! toListAsync ctx.Recipes }
 
 let getRecipe (ctx: ThisIsNotAContext) =
-  fun id -> async { return! ctx.Recipes.TryFirstAsync(fun x -> x.Id = id) }
+  fun (id: RecipeId) -> async { return! ctx.Recipes.TryFirstAsync(fun x -> x.Id = id) }
 
 let addRecipe (ctx: ThisIsNotAContext) =
   fun recipe ->

@@ -23,7 +23,7 @@ type RecipeId = RecipeId of Guid
 
 [<CLIMutable>]
 type Recipe =
-  { Id: Guid
+  { Id: RecipeId
     Title: string
     Description: string
     Source: string option
@@ -67,5 +67,5 @@ module Recipe =
 
 type IRecipeApi =
   { getRecipes: unit -> Async<Recipe list>
-    getRecipe: Guid -> Async<Recipe option>
+    getRecipe: RecipeId -> Async<Recipe option>
     addRecipe: Recipe -> Async<Recipe> }

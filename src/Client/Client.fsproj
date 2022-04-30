@@ -7,11 +7,15 @@
   <ItemGroup>
     <None Include="index.html" />
     <None Include="paket.references" />
+    <Compile Include="Components/Theme.fs" />
     <Compile Include="Components/Buttons.fs" />
     <Compile Include="Components/ThemePicker.fs" />
+    <Compile Include="Components/FormControl.fs" />
     <Compile Include="Components/Inputs.fs" />
+    <Compile Include="Components/Input.fs" />
     <Compile Include="Components/Navbar.fs" />
     <Compile Include="Pages/Recipe.fs" />
+    <Compile Include="Pages/RecipeList.fs" />
     <Compile Include="Pages/Todo.fs" />
     <Compile Include="Router.fs" />
     <Compile Include="Main.fs" />
