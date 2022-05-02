@@ -25,8 +25,6 @@ type Msg =
 let setRoute (optRoute: Route option) model =
   let model = { model with CurrentRoute = optRoute }
 
-  printfn "route %A" optRoute
-
   match optRoute with
   | None -> { model with ActivePage = Page.NotFound }, Cmd.none
   | Some Todo ->
