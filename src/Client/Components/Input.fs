@@ -9,7 +9,8 @@ module Input =
     | Password
 
   type InputProps =
-    { Type: InputType
+    { IsTextArea: bool
+      Type: InputType
       Color: ThemeColor option
       Size: Size option
       Placeholder: string option
@@ -37,6 +38,35 @@ module Input =
     props.HelperText.IsSome
     || props.RightHelperText.IsSome
 
+  let private makeInputElement (props: InputProps) =
+    Html.input [
+      mapInputType props.Type
+      if props.Placeholder.IsSome then
+        prop.placeholder props.Placeholder.Value
+      prop.classes [
+        "input"
+        if props.Bordered then "input-bordered"
+      ]
+      if props.OnChange.IsSome then
+        prop.onChange props.OnChange.Value
+      yield! props.ExtraProps
+    ]
+
+  let private makeTextareaElement (props: InputProps) =
+    Html.textarea [
+      mapInputType props.Type
+      if props.Placeholder.IsSome then
+        prop.placeholder props.Placeholder.Value
+      prop.classes [
+        "textarea"
+        if props.Bordered then
+          "textarea-bordered"
+      ]
+      if props.OnChange.IsSome then
+        prop.onChange props.OnChange.Value
+      yield! props.ExtraProps
+    ]
+
   let private makeInput (props: InputProps) =
     Html.div [
       prop.classes [
@@ -60,18 +90,9 @@ module Input =
                 ]
             ]
           ]
-        Html.input [
-          mapInputType props.Type
-          if props.Placeholder.IsSome then
-            prop.placeholder props.Placeholder.Value
-          prop.classes [
-            "input"
-            if props.Bordered then "input-bordered"
-          ]
-          if props.OnChange.IsSome then
-            prop.onChange props.OnChange.Value
-          yield! props.ExtraProps
-        ]
+        match props.IsTextArea with
+        | true -> makeTextareaElement props
+        | false -> makeInputElement props
         if hasBottomLabel props then
           Html.label [
             prop.className "label"
@@ -91,9 +112,10 @@ module Input =
       ]
     ]
 
-  type InputBuilder() =
+  type InputBuilder(IsTextArea: bool) =
     let defaultInput =
-      { Type = Text
+      { IsTextArea = IsTextArea
+        Type = Text
         Color = None
         Size = None
         Placeholder = None
@@ -156,4 +178,5 @@ module Input =
     [<CustomOperation("onChange", MaintainsVariableSpace = true)>]
     member _.onChange(props, onChange) = { props with OnChange = Some onChange }
 
-  let input = new InputBuilder()
+  let input = new InputBuilder(false)
+  let textarea = new InputBuilder(true)

@@ -38,18 +38,16 @@ type StepId = StepId of Guid
 [<CLIMutable>]
 type Step =
   { Id: StepId
-    RecipeId: RecipeId
     Recipe: Recipe
     Order: int
     Text: string }
 
-type IngredientId = IngeedientId of Guid
+type IngredientId = IngredientId of Guid
 
 [<CLIMutable>]
 type Ingredient =
   { Id: IngredientId
-    RecipeId: Guid
-    Recipe: RecipeId
+    Recipe: Recipe
     Text: string
     Type: string }
 
@@ -64,6 +62,17 @@ type Version =
 module Recipe =
   let isValid (description: string) =
     String.IsNullOrWhiteSpace description |> not
+
+  let makeEmptyRecipe () : Recipe =
+    { Id = RecipeId Guid.Empty
+      Title = ""
+      Description = ""
+      Source = None
+      Author = []
+      Ingredients = []
+      Steps = []
+      Categories = []
+      Tags = [] }
 
 type IRecipeApi =
   { getRecipes: unit -> Async<Recipe list>

@@ -9,10 +9,157 @@ open Microsoft.EntityFrameworkCore.Migrations
 open Microsoft.EntityFrameworkCore.Storage.ValueConversion
 
 [<DbContext(typeof<DbContext.ThisIsNotAContext>)>]
-type ThisIsNotAContextModelSnapshot() =
-    inherit ModelSnapshot()
+[<Migration("20220502232751_update-recipe-relationships")>]
+type updatereciperelationships() =
+    inherit Migration()
 
-    override this.BuildModel(modelBuilder: ModelBuilder) =
+    override this.Up(migrationBuilder:MigrationBuilder) =
+        migrationBuilder.DropForeignKey(
+            name = "FK_Ingredients_Recipes_RecipeId"
+            ,table = "Ingredients"
+            ) |> ignore
+
+        migrationBuilder.DropForeignKey(
+            name = "FK_Steps_Recipes_RecipeId1"
+            ,table = "Steps"
+            ) |> ignore
+
+        migrationBuilder.DropIndex(
+            name = "IX_Steps_RecipeId1"
+            ,table = "Steps"
+            ) |> ignore
+
+        migrationBuilder.DropColumn(
+            name = "RecipeId1"
+            ,table = "Steps"
+            ) |> ignore
+
+        migrationBuilder.DropColumn(
+            name = "Recipe"
+            ,table = "Ingredients"
+            ) |> ignore
+
+        migrationBuilder.AlterColumn<Guid>(
+            name = "RecipeId"
+            ,table = "Tags"
+            ,``type`` = "TEXT"
+            ,nullable = false
+            ,defaultValue = "Guid(\"00000000-0000-0000-0000-000000000000\")"
+            ,oldClrType = typedefof<Guid>
+            ,oldType = "TEXT"
+            ,oldNullable = true
+            ) |> ignore
+
+        migrationBuilder.AlterColumn<Guid>(
+            name = "RecipeId"
+            ,table = "Authors"
+            ,``type`` = "TEXT"
+            ,nullable = false
+            ,defaultValue = "Guid(\"00000000-0000-0000-0000-000000000000\")"
+            ,oldClrType = typedefof<Guid>
+            ,oldType = "TEXT"
+            ,oldNullable = true
+            ) |> ignore
+
+        migrationBuilder.CreateIndex(
+            name = "IX_Steps_RecipeId"
+            ,table = "Steps"
+            ,column = "RecipeId"
+            ) |> ignore
+
+        migrationBuilder.AddForeignKey(
+            name = "FK_Ingredients_Recipes_RecipeId"
+            ,table = "Ingredients"
+            ,column = "RecipeId"
+            ,principalTable = "Recipes"
+            ,principalColumn = "Id"
+        ) |> ignore
+
+        migrationBuilder.AddForeignKey(
+            name = "FK_Steps_Recipes_RecipeId"
+            ,table = "Steps"
+            ,column = "RecipeId"
+            ,principalTable = "Recipes"
+            ,principalColumn = "Id"
+        ) |> ignore
+
+
+    override this.Down(migrationBuilder:MigrationBuilder) =
+        migrationBuilder.DropForeignKey(
+            name = "FK_Ingredients_Recipes_RecipeId"
+            ,table = "Ingredients"
+            ) |> ignore
+
+        migrationBuilder.DropForeignKey(
+            name = "FK_Steps_Recipes_RecipeId"
+            ,table = "Steps"
+            ) |> ignore
+
+        migrationBuilder.DropIndex(
+            name = "IX_Steps_RecipeId"
+            ,table = "Steps"
+            ) |> ignore
+
+        migrationBuilder.AlterColumn<Guid>(
+            name = "RecipeId"
+            ,table = "Tags"
+            ,``type`` = "TEXT"
+            ,nullable = true
+            ,oldClrType = typedefof<Guid>
+            ,oldType = "TEXT"
+            ,oldNullable = false
+            ) |> ignore
+
+        migrationBuilder.AddColumn<Guid>(
+            name = "RecipeId1"
+            ,table = "Steps"
+            ,``type`` = "TEXT"
+            ,nullable = true
+            ) |> ignore
+
+        migrationBuilder.AddColumn<Guid>(
+            name = "Recipe"
+            ,table = "Ingredients"
+            ,``type`` = "TEXT"
+            ,nullable = false
+            ,defaultValue = "Guid(\"00000000-0000-0000-0000-000000000000\")"
+            ) |> ignore
+
+        migrationBuilder.AlterColumn<Guid>(
+            name = "RecipeId"
+            ,table = "Authors"
+            ,``type`` = "TEXT"
+            ,nullable = true
+            ,oldClrType = typedefof<Guid>
+            ,oldType = "TEXT"
+            ,oldNullable = false
+            ) |> ignore
+
+        migrationBuilder.CreateIndex(
+            name = "IX_Steps_RecipeId1"
+            ,table = "Steps"
+            ,column = "RecipeId1"
+            ) |> ignore
+
+        migrationBuilder.AddForeignKey(
+            name = "FK_Ingredients_Recipes_RecipeId"
+            ,table = "Ingredients"
+            ,column = "RecipeId"
+            ,principalTable = "Recipes"
+            ,principalColumn = "Id"
+            ,onDelete = ReferentialAction.Cascade
+        ) |> ignore
+
+        migrationBuilder.AddForeignKey(
+            name = "FK_Steps_Recipes_RecipeId1"
+            ,table = "Steps"
+            ,column = "RecipeId1"
+            ,principalTable = "Recipes"
+            ,principalColumn = "Id"
+        ) |> ignore
+
+
+    override this.BuildTargetModel(modelBuilder: ModelBuilder) =
         modelBuilder.HasAnnotation("ProductVersion", "6.0.4") |> ignore
 
         modelBuilder.Entity("CategoryRecipe", (fun b ->
