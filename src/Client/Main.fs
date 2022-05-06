@@ -133,13 +133,7 @@ let view (model: Model) (dispatch: Dispatch<Msg>) =
                 ]
                 prop.children [
                   Html.div "Copyright 2022 - Dog In a Sweater"
-                  Html.i [
-                    prop.classes [
-                      "fab"
-                      "fa-github"
-                      "block"
-                    ]
-                  ]
+                  FA.b "github"
                 ]
               ]
             ]
