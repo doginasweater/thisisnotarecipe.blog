@@ -22,6 +22,9 @@ type Msg =
   | Cancel
   | AddIngredient
   | AddStep
+  | UpdateTitle of string
+  | UpdateSource of string
+  | UpdateDescription of string
 
 let recipesApi =
   Remoting.createApi ()
@@ -53,7 +56,9 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
           @ [ { Id = IngredientId Guid.Empty
                 Recipe = r
                 Text = ""
-                Type = "" } ]
+                Type = ""
+                Amount = ""
+                Unit = "" } ]
 
         Some { r with Ingredients = ingredients })
 
@@ -72,6 +77,25 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
         Some { r with Steps = steps })
 
     { model with Recipe = newRecipe }, Cmd.none
+  | UpdateTitle text ->
+    let newRecipe =
+      model.Recipe
+      |> Option.bind (fun r -> Some { r with Title = text })
+
+    { model with Recipe = newRecipe }, Cmd.none
+  | UpdateSource text ->
+    let newRecipe =
+      model.Recipe
+      |> Option.bind (fun r -> Some { r with Source = Some text })
+
+    { model with Recipe = newRecipe }, Cmd.none
+  | UpdateDescription text ->
+    let newRecipe =
+      model.Recipe
+      |> Option.bind (fun r -> Some { r with Description = text })
+
+    { model with Recipe = newRecipe }, Cmd.none
+
 
 open Feliz
 
@@ -79,7 +103,10 @@ let title model =
   match model.Recipe with
   | Some r ->
     if r.Id = (RecipeId Guid.Empty) then
-      Html.h1 "New Recipe"
+      Html.h1 [
+        prop.classes [ "mb-0" ]
+        prop.text "New Recipe"
+      ]
     else
       Html.h1 r.Title
   | None -> Html.h1 "New Recipe"
@@ -99,10 +126,28 @@ let view (model: Model) dispatch =
           input {
             label "Title"
             classes [ "flex-1" ]
+
+            value (
+              match model.Recipe with
+              | None -> ""
+              | Some r -> r.Title
+            )
+
+            onChange (fun x -> UpdateTitle x |> dispatch)
           }
           input {
             label "Source"
             classes [ "flex-1" ]
+            onChange (fun x -> UpdateSource x |> dispatch)
+
+            value (
+              match model.Recipe with
+              | None -> ""
+              | Some r ->
+                match r.Source with
+                | None -> ""
+                | Some s -> s
+            )
           }
           input {
             label "Author(s)"
@@ -116,6 +161,13 @@ let view (model: Model) dispatch =
           textarea {
             label "Description"
             classes [ "flex-1"; "h-24" ]
+            onChange (fun x -> UpdateDescription x |> dispatch)
+
+            value (
+              match model.Recipe with
+              | None -> ""
+              | Some r -> r.Description
+            )
           }
         ]
       ]

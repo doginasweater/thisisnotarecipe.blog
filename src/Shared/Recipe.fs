@@ -48,6 +48,8 @@ type IngredientId = IngredientId of Guid
 type Ingredient =
   { Id: IngredientId
     Recipe: Recipe
+    Amount: string
+    Unit: string
     Text: string
     Type: string }
 

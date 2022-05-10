@@ -9,10 +9,41 @@ open Microsoft.EntityFrameworkCore.Migrations
 open Microsoft.EntityFrameworkCore.Storage.ValueConversion
 
 [<DbContext(typeof<DbContext.ThisIsNotAContext>)>]
-type ThisIsNotAContextModelSnapshot() =
-    inherit ModelSnapshot()
+[<Migration("20220510004744_tweakingredients")>]
+type tweakingredients() =
+    inherit Migration()
 
-    override this.BuildModel(modelBuilder: ModelBuilder) =
+    override this.Up(migrationBuilder:MigrationBuilder) =
+        migrationBuilder.AddColumn<string>(
+            name = "Amount"
+            ,table = "Ingredients"
+            ,``type`` = "TEXT"
+            ,nullable = false
+            ,defaultValue = "\"\""
+            ) |> ignore
+
+        migrationBuilder.AddColumn<string>(
+            name = "Unit"
+            ,table = "Ingredients"
+            ,``type`` = "TEXT"
+            ,nullable = false
+            ,defaultValue = "\"\""
+            ) |> ignore
+
+
+    override this.Down(migrationBuilder:MigrationBuilder) =
+        migrationBuilder.DropColumn(
+            name = "Amount"
+            ,table = "Ingredients"
+            ) |> ignore
+
+        migrationBuilder.DropColumn(
+            name = "Unit"
+            ,table = "Ingredients"
+            ) |> ignore
+
+
+    override this.BuildTargetModel(modelBuilder: ModelBuilder) =
         modelBuilder.HasAnnotation("ProductVersion", "6.0.4") |> ignore
 
         modelBuilder.Entity("CategoryRecipe", (fun b ->
